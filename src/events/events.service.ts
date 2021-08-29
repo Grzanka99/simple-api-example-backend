@@ -24,7 +24,7 @@ export class EventsService {
   async find(id?: any): Promise<any> {
     let found: EventEntity | EventEntity[];
 
-    if (id) found = await this.repo.findOne(id);
+    if (id !== undefined) found = await this.repo.findOne(id);
     else found = await this.repo.find();
 
     if (!found) {
