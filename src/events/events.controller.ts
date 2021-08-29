@@ -19,7 +19,7 @@ export class EventsController {
 
   @Post('/')
   async createEvent(
-    @Body(new ValidationPipe()) createEventDto: CreateEventDto,
+    @Body(new ValidationPipe()) createEventDto: CreateEventDto[],
   ) {
     return await this.service.create(createEventDto);
   }

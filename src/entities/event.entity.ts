@@ -18,10 +18,14 @@ export class EventEntity {
   @Column()
   event: Date;
 
+  static capitalize(str: string) {
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  }
+
   constructor(data?: CreateEventInterface) {
     if (!data) return;
-    this.firstName = data.firstName;
-    this.lastName = data.lastName;
+    this.firstName = EventEntity.capitalize(data.firstName);
+    this.lastName = EventEntity.capitalize(data.lastName);
     this.email = data.email;
     this.event = data.event;
   }

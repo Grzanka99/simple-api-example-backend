@@ -10,16 +10,19 @@ export class EventsService {
     @InjectRepository(EventEntity) private repo: Repository<EventEntity>,
   ) { }
 
-  async create(data: CreateEventInterface): Promise<EventEntity> {
-    const newItem = new EventEntity(data);
-
-    return await this.repo.save(newItem);
+  async create(data: CreateEventInterface[]): Promise<EventEntity[]> {
+    const newItems = data.map((item) => {
+      if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(item.email))
+        throw new TypeError('Wrong email format');
+      return new EventEntity(item);
+    });
+    return await this.repo.save(newItems);
   }
 
   async find(): Promise<EventEntity[]>;
   async find(id: number): Promise<EventEntity>;
   async find(id?: any): Promise<any> {
-    if (id) return await this.repo.findByIds(id);
+    if (id) return await this.repo.findOne(id);
     return await this.repo.find();
   }
 
