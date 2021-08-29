@@ -8,13 +8,14 @@ First, install all node modules
 $ pnpm install
 ```
 
-## Now prepare ormcongig
+## Now prepare ormconfig
 
 ```bash
 $ cp ormconfig.example.json ormconfig.json
 ```
 
 You can easily run mysql server with docker
+
 ```bash
 $ docker run --name test-mysql -p 3306:3306 \
               -e MYSQL_ROOT_PASSWORD=root \
@@ -22,7 +23,7 @@ $ docker run --name test-mysql -p 3306:3306 \
               -d mysql:latest
 ```
 
-And then configure config 
+And then configure ormconfig.json file
 
 ```json 
 {
