@@ -16,7 +16,23 @@ export class EventsService {
     return await this.repo.save(newItem);
   }
 
-  async find(): Promise<EventEntity[]> {
+  async find(): Promise<EventEntity[]>;
+  async find(id: number): Promise<EventEntity>;
+  async find(id?: any): Promise<any> {
+    if (id) return await this.repo.findByIds(id);
     return await this.repo.find();
+  }
+
+  async delete(
+    id: number,
+  ): Promise<{ affected: number; removed: EventEntity }> {
+    const removed = await this.find(id);
+
+    const { affected } = await this.repo.delete(id);
+
+    return {
+      affected,
+      removed,
+    };
   }
 }
