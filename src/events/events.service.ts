@@ -27,7 +27,7 @@ export class EventsService {
     if (id) found = await this.repo.findOne(id);
     else found = await this.repo.find();
 
-    if (!found || (Array.isArray(found) && !found.length)) {
+    if (!found) {
       throw new NotFoundException(`Event of id: ${id} not found`);
     }
 
