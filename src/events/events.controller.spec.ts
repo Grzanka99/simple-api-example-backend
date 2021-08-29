@@ -4,6 +4,7 @@ import { Connection, Repository } from 'typeorm';
 import { EventsController } from './events.controller';
 import { EventsService } from './events.service';
 import { CreateEventInterface } from 'src/interfaces/events.interface';
+import { NotFoundException } from '@nestjs/common';
 
 describe('EventsController', () => {
   let controller: EventsController;
@@ -80,5 +81,18 @@ describe('EventsController', () => {
 
     expect(deleted.affected).toBe(1);
     expect(deleted.removed).toMatchObject(res[0]);
+  });
+
+  it('should return TypeError', async () => {
+    // @ts-expect-error it's for testing
+    await expect(controller.createEvent(invalidData)).rejects.toThrowError(
+      TypeError('Wrong email format'),
+    );
+  });
+
+  it('should throw NotFoundException', async () => {
+    await expect(controller.findOne({ id: 0 })).rejects.toThrowError(
+      new NotFoundException('Event of id: 0 not found'),
+    );
   });
 });

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateEventInterface } from 'src/interfaces/events.interface';
 import { Repository } from 'typeorm';
@@ -22,8 +22,16 @@ export class EventsService {
   async find(): Promise<EventEntity[]>;
   async find(id: number): Promise<EventEntity>;
   async find(id?: any): Promise<any> {
-    if (id) return await this.repo.findOne(id);
-    return await this.repo.find();
+    let found: EventEntity | EventEntity[];
+
+    if (id) found = await this.repo.findOne(id);
+    else found = await this.repo.find();
+
+    if (!found || (Array.isArray(found) && !found.length)) {
+      throw new NotFoundException(`Event of id: ${id} not found`);
+    }
+
+    return found;
   }
 
   async delete(

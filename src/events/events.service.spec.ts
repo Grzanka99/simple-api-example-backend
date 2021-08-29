@@ -3,6 +3,7 @@ import { CreateEventInterface } from 'src/interfaces/events.interface';
 import { createTestDB } from '../../test/helpers/create-test-db.helper';
 import { Connection, Repository } from 'typeorm';
 import { EventsService } from './events.service';
+import { NotFoundException } from '@nestjs/common';
 
 describe('EventsService', () => {
   let db: Connection;
@@ -95,6 +96,12 @@ describe('EventsService', () => {
 
     expect(deleted.affected).toBe(1);
     expect(deleted.removed).toMatchObject(created[0]);
+  });
+
+  it('should return NotFoundException', async () => {
+    await expect(service.find(0)).rejects.toThrowError(
+      new NotFoundException('Event of id: 0 not found'),
+    );
   });
 
   it('should throw type error', async () => {

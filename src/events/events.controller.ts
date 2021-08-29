@@ -19,9 +19,12 @@ export class EventsController {
 
   @Post('/')
   async createEvent(
-    @Body(new ValidationPipe()) createEventDto: CreateEventDto[],
+    @Body(new ValidationPipe())
+    createEventDto: CreateEventDto[] | CreateEventDto,
   ) {
-    return await this.service.create(createEventDto);
+    if (Array.isArray(createEventDto))
+      return await this.service.create(createEventDto);
+    else return this.service.create([createEventDto]);
   }
 
   @Delete('/:id')
